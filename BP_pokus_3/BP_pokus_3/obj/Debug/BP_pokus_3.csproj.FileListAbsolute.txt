@@ -26,3 +26,11 @@ C:\Users\Comp\Desktop\BP_pokus_3__17.3.2017\BP_pokus_3\BP_pokus_3\obj\Debug\BP_p
 C:\Users\Comp\Desktop\BP_pokus_3__17.3.2017\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.csproj.GenerateResource.Cache
 C:\Users\Comp\Desktop\BP_pokus_3__17.3.2017\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.exe
 C:\Users\Comp\Desktop\BP_pokus_3__17.3.2017\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.pdb
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\bin\Debug\BP_pokus_3.exe.config
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\bin\Debug\BP_pokus_3.exe
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\bin\Debug\BP_pokus_3.pdb
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.csprojResolveAssemblyReference.cache
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.MainForm.resources
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.csproj.GenerateResource.Cache
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.exe
+C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.pdb

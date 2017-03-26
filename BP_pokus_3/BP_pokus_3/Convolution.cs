@@ -11,7 +11,7 @@ namespace BP_pokus_3
 		public double[,] weights;
 		public AverageInput[,] avInput;					// pro pocitani stredni hodnoty vstupu kazde vahy 
 		public int cisloFiltra;
-		private int _size;
+		public int size;
 		public double grad;
 		public double averageOutput;
 		public LinkedList<double> allOutputs = new LinkedList<double>();
@@ -25,7 +25,7 @@ namespace BP_pokus_3
 		{
 			weights = doRandomWeights(new double[size,size]);
 			avInput = new AverageInput[size,size];
-			this._size = size;
+			this.size = size;
 			for (int i=0; i<size; i++) {
 				for (int j=0; j<size; j++) {
 					avInput[i,j].inputList = new LinkedList<double>();
@@ -55,8 +55,8 @@ namespace BP_pokus_3
 		}
 		
 		public void countAverageInput() {
-			for (int i=0; i<_size; i++) {
-				for (int j=0; j<_size; j++) {
+			for (int i=0; i<size; i++) {
+				for (int j=0; j<size; j++) {
 					LinkedListNode<Double> templ = avInput[i,j].inputList.First;
 					for(int k=0; k<avInput[i,j].inputList.Count; k++) {
 						avInput[i,j].average += templ.Value;

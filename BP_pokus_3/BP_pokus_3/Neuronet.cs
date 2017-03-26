@@ -45,7 +45,7 @@ namespace BP_pokus_3
 				convolutions.AddLast(new Convolution(size,cisloFiltra));
 			} 
 			else {
-				cisloFiltra = 1;
+//				cisloFiltra = 1;
 				LinkedListNode<Convolution> templ = convolutions.First;
 				while(templ!=null) {
 					templ = templ.Next;
