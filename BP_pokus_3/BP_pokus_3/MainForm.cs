@@ -10,8 +10,10 @@ namespace BP_pokus_3
 	/// <summary>
 	/// Description of MainForm.
 	/// </summary>
-	partial class MainForm : Form
-	{	static String _info;
+	partial class MainForm : Form 
+	{
+		static String progressInfo;
+		static String _info;
 		static String  _convolutionsInfo;
 		int Answer;
 		bool [] UzByli = new bool[] {false, false, false, false, false, false , false, false, false, false};				//,
@@ -61,21 +63,21 @@ namespace BP_pokus_3
 		}
 		
 		int calculateResult(double[,] picture) {
-			writeInfo(picture, "start");
+//			writeInfo(picture, "start");
 			double[][,] firstConvolution = new double[5][,];				//prvni vrstva, convolution 11x11
 			for(int i=0; i<5; i++) {
 				firstConvolution[i] = applyConvolution(i, picture);							//prvni konvoluce
-				if (i==0)
-					writeInfo(firstConvolution[i], "apply convolution 1");
+//				if (i==0)
+//					writeInfo(firstConvolution[i], "apply convolution 1");
 				firstConvolution[i] = addX(firstConvolution[i]);				
-				if (i==0)
-					writeInfo(firstConvolution[i], "Add x - 0");
+//				if (i==0)
+//					writeInfo(firstConvolution[i], "Add x - 0");
 				firstConvolution[i] = pooling(2, firstConvolution[i]);						//prvni pooling
-				if (i==0)
-					writeInfo(firstConvolution[i], "pooling 1");
+//				if (i==0)
+//					writeInfo(firstConvolution[i], "pooling 1");
 				firstConvolution[i] = function(firstConvolution[i]);						// prvni funkce aktivace (Tanh)
-				if (i==0)
-					writeInfo(firstConvolution[i], "TanH 1");
+//				if (i==0)
+//					writeInfo(firstConvolution[i], "TanH 1");
 			}
 			
 			double[][,] secondConvolution = new double[25][,];
@@ -84,11 +86,11 @@ namespace BP_pokus_3
 			for(int j=0; j<5; j++) {
 				for(int i=0; i<5; i++) {
 					secondConvolution[cisloPolozky] = applyConvolution(cisloFiltra, firstConvolution[j]);
-					if (i==0)
-						writeInfo(picture, "apply convolution 2");
+//					if ((j==0)&&(i==0))
+//						writeInfo(secondConvolution[cisloPolozky], "apply convolution 2");
 					secondConvolution[cisloPolozky] = pooling(2, secondConvolution[cisloPolozky]);
-					if (i==0)
-						writeInfo(picture, "poolin 2");
+//					if ((j==0)&&(i==0))
+//						writeInfo(secondConvolution[cisloPolozky], "poolin 2");
 					secondConvolution[cisloPolozky] = function(secondConvolution[cisloPolozky]);
 					cisloFiltra++;
 					cisloPolozky++;
@@ -101,7 +103,14 @@ namespace BP_pokus_3
 			for(int j=0; j<25; j++) {
 				for(int i=0; i<5; i++) {
 					thirdConvolution[cisloPolozky] = applyConvolution(cisloFiltra, secondConvolution[j]);
-					writeInfo(picture, "apply convolution 3");
+//					if ((j==0)&&(i==0))
+//						writeInfo(thirdConvolution[cisloPolozky], "apply convolution 3");
+					thirdConvolution[cisloPolozky] = addY(thirdConvolution[cisloPolozky]);
+//					if ((j==0)&&(i==0))
+//						writeInfo(thirdConvolution[cisloPolozky], "add y - 0");
+					thirdConvolution[cisloPolozky] = pooling(3, thirdConvolution[cisloPolozky]);
+//					if((j==0)&&(i==0))
+//						writeInfo(thirdConvolution[cisloPolozky], "pooling 3x3");
 					thirdConvolution[cisloPolozky] = function(thirdConvolution[cisloPolozky]);
 					cisloFiltra++;
 					cisloPolozky++;
@@ -157,12 +166,14 @@ namespace BP_pokus_3
 		
 		void study() {
 			double [] err = new double[Neuronet.tretiVrstva];
-			int iteration = 0;
+			int iteration = 1;
 			double lokError = 0;
 			int lokResult = 0;
 			double errorMin = 100;
+			int testValue = 0;
 			
-			while(test() < 100) {
+			
+			while(testValue < 100) {
 				lokResult = calculateResult(getPicture());
 				Neuron templ3 = net.l3.head;
 				for  (int i=0; i<Neuronet.tretiVrstva; i++) {
@@ -290,7 +301,16 @@ namespace BP_pokus_3
 				
 				if ((lokError/iteration*100)<errorMin)
 					errorMin = lokError/iteration*100;
+				if (iteration % 10 == 0) {
+					testValue = test();
+					writeProgressInfo(iteration, errorMin, testValue);
+					newEpoch(); 				//?
+				}
+				else {
+					writeProgressInfo(iteration, errorMin);
+				}
 			}
+			serializace();
 			
 		}
 		
@@ -327,6 +347,10 @@ namespace BP_pokus_3
 		}
 		
 		double[,] applyConvolution(int cisloFiltra, double[,] picture){
+			bool test = false;
+			if(cisloFiltra==5) {
+				test= true;	
+			}
 			LinkedListNode<Convolution> templ = net.convolutions.First;
 			while(cisloFiltra != 0 ) {
 				templ = templ.Next;
@@ -346,6 +370,7 @@ namespace BP_pokus_3
 				y0++;
 			}
 			return result;
+			
 		}
 
 		double sum(double[,] picture, Convolution templ , int x0, int y0) {
@@ -369,7 +394,22 @@ namespace BP_pokus_3
 			net = new Neuronet();
 			study();
 		}
-
+			
+		double[] doOneArray(double[][,] thirdConvolution) {
+		int length = thirdConvolution.Length*thirdConvolution[0].Length;
+		double[] result = new double[length];
+		int counter = 0;
+			for (int i = 0; i<thirdConvolution.Length; i++) {
+				for(int j=0; j<thirdConvolution[i].GetUpperBound(0)+1; j++) {
+					for(int k=0; k< thirdConvolution[i].GetUpperBound(1)+1; k++) {
+						result[counter] = thirdConvolution[i][j,k];
+						counter++;
+					}
+				}
+			}
+			return result;
+		}
+		
 		public static void writeInfo(double[,] picture, String typeOfTransformation)
 		{
 			_info +=typeOfTransformation+" -> "+"\r\n"+"x- "+ (picture.GetUpperBound(1)+1).ToString() +"\r\n"+ "y -"+(picture.GetUpperBound(0)+1).ToString()+"\r\n";
@@ -389,20 +429,15 @@ namespace BP_pokus_3
 			_convolutionsInfo += "\r\n"+"\r\n";
 			File.WriteAllText("Convolutions.txt", _convolutionsInfo);
 		}
-			
-		double[] doOneArray(double[][,] thirdConvolution) {
-		int length = thirdConvolution.Length*thirdConvolution[1].Length;
-		double[] result = new double[length];
-		int counter = 0;
-			for (int i = 0; i<thirdConvolution.Length; i++) {
-				for(int j=0; j<thirdConvolution[i].GetUpperBound(0); j++) {
-					for(int k=0; k< thirdConvolution[i].GetUpperBound(1); k++) {
-						result[counter] = thirdConvolution[i][j,k];
-						counter++;
-					}
-				}
-			}
-			return result;
+		
+		static void writeProgressInfo(int iteration, double errorMin, int testValue) {
+			progressInfo += "iteration= "+iteration+" error min. = "+errorMin+" test= "+testValue+"\r\n";
+			File.WriteAllText("writeProgressInfo.txt", progressInfo);
+		}
+		
+		static void writeProgressInfo(int iteration, double errorMin) {
+			progressInfo += "iteration= "+iteration+" error min. = "+errorMin+"\r\n";
+			File.WriteAllText("writeProgressInfo.txt", progressInfo);
 		}
 		
 		public	int test() {
@@ -444,7 +479,7 @@ namespace BP_pokus_3
 			for(int i=0; i<picture.GetUpperBound(0)+1; i++) {
 				for(int j=0; j<picture.GetUpperBound(1)+2; j++) {
 					if(j==picture.GetUpperBound(1)+1) {
-						result[i,j] = 0;
+						result[i,j] = -100;
 					}
 					else {
 						result[i,j] = picture[i,j];
@@ -453,14 +488,21 @@ namespace BP_pokus_3
 			}
 			return result;
 		}
-//
-//		double[,] addY(double[,] picture) {									//pridani radka '0' k polu
-//			double[,] result = new double[picture.GetUpperBound(0)+2, picture.GetUpperBound(1)+1 ];
-//			for (int i=0; i<picture.GetUpperBound(1)+1; i++) {
-//				result[picture.GetUpperBound(0)+2, i] = 0;
-//			}
-//			return result;
-//		}
+
+		double[,] addY(double[,] picture) {									//pridani radka '0' k polu
+			double[,] result = new double[picture.GetUpperBound(0)+2, picture.GetUpperBound(1)+1 ];
+			for(int i=0; i<picture.GetUpperBound(0)+2; i++) {
+				for(int j=0; j<picture.GetUpperBound(1)+1; j++) {
+					if(i==picture.GetUpperBound(0)+1) {
+						result[i,j] = -100;
+					}
+					else {
+						result[i,j] = picture[i,j];
+					}
+				}
+			}
+			return result;
+		}
 		
 	}
 }

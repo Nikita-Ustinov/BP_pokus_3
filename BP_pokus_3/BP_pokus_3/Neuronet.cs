@@ -6,7 +6,7 @@ namespace BP_pokus_3
 	public class Neuronet
 	{	
 		public List l1, l2, l3;
-		public static int inputLength = 375;		//pro fully connection neuronet
+		public static int inputLength = 250;		//pro fully connection neuronet
 		public static int prvniVrstva = 50;		
 		public static int druhaVrstva= 50;		
 		public static int tretiVrstva= 10;

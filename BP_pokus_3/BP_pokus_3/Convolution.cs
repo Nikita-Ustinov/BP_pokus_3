@@ -23,6 +23,7 @@ namespace BP_pokus_3
 		
 		public Convolution(int size, int cisloFiltra)
 		{
+			this.cisloFiltra = cisloFiltra;
 			weights = doRandomWeights(new double[size,size]);
 			avInput = new AverageInput[size,size];
 			this.size = size;

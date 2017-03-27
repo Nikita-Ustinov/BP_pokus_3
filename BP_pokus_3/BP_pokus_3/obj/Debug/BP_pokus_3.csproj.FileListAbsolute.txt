@@ -34,3 +34,11 @@ C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pok
 C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.csproj.GenerateResource.Cache
 C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.exe
 C:\Users\Comp\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.pdb
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\bin\Debug\BP_pokus_3.exe.config
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\bin\Debug\BP_pokus_3.exe
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\bin\Debug\BP_pokus_3.pdb
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.csprojResolveAssemblyReference.cache
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.MainForm.resources
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.csproj.GenerateResource.Cache
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.exe
+C:\Users\Nkita\Documents\GitHub\BP_pokus_3\BP_pokus_3\BP_pokus_3\obj\Debug\BP_pokus_3.pdb
