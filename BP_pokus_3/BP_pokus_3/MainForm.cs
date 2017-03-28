@@ -14,7 +14,7 @@ namespace BP_pokus_3
 	{
 		static String progressInfo;
 		static String _info;
-		static String  _convolutionsInfo;
+		static String _convolutionsInfo;
 		int Answer;
 		bool [] UzByli = new bool[] {false, false, false, false, false, false , false, false, false, false};				//,
 		Neuronet net ;
@@ -149,6 +149,7 @@ namespace BP_pokus_3
 			for (int i=0; i<15; i++) {
 				templ.Value.countAverageInput();
 				templ.Value.countAverageOutput();
+				templ = templ.Next;
 			}
 			
 			return index;
@@ -294,7 +295,6 @@ namespace BP_pokus_3
 					}
 					templ = templ.Next;
 				}
-				iteration++;
 				
 				if (Answer != lokResult)
 					lokError++;
@@ -304,11 +304,20 @@ namespace BP_pokus_3
 				if (iteration % 10 == 0) {
 					testValue = test();
 					writeProgressInfo(iteration, errorMin, testValue);
+					writeAllConvolution(iteration);
 					newEpoch(); 				//?
 				}
 				else {
 					writeProgressInfo(iteration, errorMin);
+					writeAllConvolution(iteration);
 				}
+				if(iteration % 100 == 0) {
+					_convolutionsInfo=null;
+				}
+				if(iteration % 500 == 0) {
+					progressInfo = null;
+				}
+				iteration++;
 			}
 			serializace();
 			
@@ -347,10 +356,10 @@ namespace BP_pokus_3
 		}
 		
 		double[,] applyConvolution(int cisloFiltra, double[,] picture){
-			bool test = false;
-			if(cisloFiltra==5) {
-				test= true;	
-			}
+//			bool test = false;
+//			if(cisloFiltra==5) {
+//				test= true;	
+//			}
 			LinkedListNode<Convolution> templ = net.convolutions.First;
 			while(cisloFiltra != 0 ) {
 				templ = templ.Next;
@@ -370,16 +379,25 @@ namespace BP_pokus_3
 				y0++;
 			}
 			return result;
-			
 		}
 
 		double sum(double[,] picture, Convolution templ , int x0, int y0) {
 			double result = 0;
+			if(templ.cisloFiltra == 1) {
+				
+			}
 			int y = 0;			// kountery pro konvoluce
 			int x = 0;
 			for(int i=y0; i<y0+templ.size; i++) {
-				for(int j=x0; j<x0+templ.size-1; j++) {
-					result += picture[i,j]*templ.weights[y,x];
+				for(int j=x0; j<x0+templ.size; j++) {
+					if(j==picture.GetUpperBound(1)+1) {
+						result += picture[i,j-1]*templ.weights[y,x];
+						templ.avInput[y,x].inputList.AddLast(picture[i,j-1]);
+					}
+					else {
+						result += picture[i,j]*templ.weights[y,x];
+						templ.avInput[y,x].inputList.AddLast(picture[i,j]);
+					}
 					x++;
 				}
 				x=0;
@@ -439,10 +457,19 @@ namespace BP_pokus_3
 			progressInfo += "iteration= "+iteration+" error min. = "+errorMin+"\r\n";
 			File.WriteAllText("writeProgressInfo.txt", progressInfo);
 		}
+
+		void writeAllConvolution(int iteration)
+		{
+			LinkedListNode<Convolution> templ = net.convolutions.First;
+			for(int i=0; i<15; i++) {
+				writeConvolution(templ.Value.weights, "Conv. № "+i+" iteration: "+ iteration);
+				templ = templ.Next;
+			}
+		}
 		
 		public	int test() {
 			int vysledek=0;
-			for (int j=0; j<10; j++) {
+			for (int j=0; j<1; j++) {
 				newEpoch();
 				for (int i=0; i<10; i++) {
 					int vysOperace = calculateResult(getPicture());
@@ -453,7 +480,7 @@ namespace BP_pokus_3
 						vysledek += 0;
 				}
 			}
-			return vysledek;
+			return vysledek*10;
 		}
 
 		void serializace() {

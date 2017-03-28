@@ -58,6 +58,9 @@ namespace BP_pokus_3
 		public void countAverageInput() {
 			for (int i=0; i<size; i++) {
 				for (int j=0; j<size; j++) {
+//					if(j==10){
+//						
+//					}
 					LinkedListNode<Double> templ = avInput[i,j].inputList.First;
 					for(int k=0; k<avInput[i,j].inputList.Count; k++) {
 						avInput[i,j].average += templ.Value;

@@ -1,68 +1,69 @@
-iteration= 2 error min. = 50
-iteration= 3 error min. = 50
-iteration= 4 error min. = 50
-iteration= 5 error min. = 50
-iteration= 6 error min. = 50
-iteration= 7 error min. = 50
-iteration= 8 error min. = 50
-iteration= 9 error min. = 50
-iteration= 10 error min. = 50 test= 10
-iteration= 11 error min. = 50
-iteration= 12 error min. = 50
-iteration= 13 error min. = 50
-iteration= 14 error min. = 50
-iteration= 15 error min. = 50
-iteration= 16 error min. = 50
-iteration= 17 error min. = 50
-iteration= 18 error min. = 50
-iteration= 19 error min. = 50
-iteration= 20 error min. = 50 test= 10
-iteration= 21 error min. = 50
-iteration= 22 error min. = 50
-iteration= 23 error min. = 50
-iteration= 24 error min. = 50
-iteration= 25 error min. = 50
-iteration= 26 error min. = 50
-iteration= 27 error min. = 50
-iteration= 28 error min. = 50
-iteration= 29 error min. = 50
-iteration= 30 error min. = 50 test= 10
-iteration= 31 error min. = 50
-iteration= 32 error min. = 50
-iteration= 33 error min. = 50
-iteration= 34 error min. = 50
-iteration= 35 error min. = 50
-iteration= 36 error min. = 50
-iteration= 37 error min. = 50
-iteration= 38 error min. = 50
-iteration= 39 error min. = 50
-iteration= 40 error min. = 50 test= 10
-iteration= 41 error min. = 50
-iteration= 42 error min. = 50
-iteration= 43 error min. = 50
-iteration= 44 error min. = 50
-iteration= 45 error min. = 50
-iteration= 46 error min. = 50
-iteration= 47 error min. = 50
-iteration= 48 error min. = 50
-iteration= 49 error min. = 50
-iteration= 50 error min. = 50 test= 10
-iteration= 51 error min. = 50
-iteration= 52 error min. = 50
-iteration= 53 error min. = 50
-iteration= 54 error min. = 50
-iteration= 55 error min. = 50
-iteration= 56 error min. = 50
-iteration= 57 error min. = 50
-iteration= 58 error min. = 50
-iteration= 59 error min. = 50
-iteration= 60 error min. = 50 test= 10
-iteration= 61 error min. = 50
-iteration= 62 error min. = 50
-iteration= 63 error min. = 50
-iteration= 64 error min. = 50
-iteration= 65 error min. = 50
-iteration= 66 error min. = 50
-iteration= 67 error min. = 50
-iteration= 68 error min. = 50
-iteration= 69 error min. = 50
+iteration= 1 error min. = 100
+iteration= 2 error min. = 100
+iteration= 3 error min. = 100
+iteration= 4 error min. = 100
+iteration= 5 error min. = 80
+iteration= 6 error min. = 80
+iteration= 7 error min. = 80
+iteration= 8 error min. = 80
+iteration= 9 error min. = 80
+iteration= 10 error min. = 80 test= 0
+iteration= 11 error min. = 80
+iteration= 12 error min. = 80
+iteration= 13 error min. = 80
+iteration= 14 error min. = 80
+iteration= 15 error min. = 80
+iteration= 16 error min. = 80
+iteration= 17 error min. = 80
+iteration= 18 error min. = 80
+iteration= 19 error min. = 80
+iteration= 20 error min. = 80 test= 0
+iteration= 21 error min. = 80
+iteration= 22 error min. = 80
+iteration= 23 error min. = 80
+iteration= 24 error min. = 80
+iteration= 25 error min. = 80
+iteration= 26 error min. = 80
+iteration= 27 error min. = 80
+iteration= 28 error min. = 80
+iteration= 29 error min. = 80
+iteration= 30 error min. = 80 test= 0
+iteration= 31 error min. = 80
+iteration= 32 error min. = 80
+iteration= 33 error min. = 80
+iteration= 34 error min. = 80
+iteration= 35 error min. = 80
+iteration= 36 error min. = 80
+iteration= 37 error min. = 80
+iteration= 38 error min. = 80
+iteration= 39 error min. = 80
+iteration= 40 error min. = 80 test= 0
+iteration= 41 error min. = 80
+iteration= 42 error min. = 80
+iteration= 43 error min. = 80
+iteration= 44 error min. = 80
+iteration= 45 error min. = 80
+iteration= 46 error min. = 80
+iteration= 47 error min. = 80
+iteration= 48 error min. = 80
+iteration= 49 error min. = 80
+iteration= 50 error min. = 80 test= 0
+iteration= 51 error min. = 80
+iteration= 52 error min. = 80
+iteration= 53 error min. = 80
+iteration= 54 error min. = 80
+iteration= 55 error min. = 80
+iteration= 56 error min. = 80
+iteration= 57 error min. = 80
+iteration= 58 error min. = 80
+iteration= 59 error min. = 80
+iteration= 60 error min. = 80 test= 0
+iteration= 61 error min. = 80
+iteration= 62 error min. = 80
+iteration= 63 error min. = 80
+iteration= 64 error min. = 80
+iteration= 65 error min. = 80
+iteration= 66 error min. = 80
+iteration= 67 error min. = 80
+iteration= 68 error min. = 80
+iteration= 69 error min. = 80
