@@ -10,7 +10,8 @@ namespace BP_pokus_3
 	/// <summary>
 	/// Description of MainForm.
 	/// </summary>
-	partial class MainForm : Form 
+	
+	partial class MainForm : Form
 	{
 		static String progressInfo;
 		static String _info;
@@ -63,35 +64,22 @@ namespace BP_pokus_3
 		}
 		
 		int calculateResult(double[,] picture) {
-//			writeInfo(picture, "start");
 			double[][,] firstConvolution = new double[5][,];				//prvni vrstva, convolution 11x11
 			for(int i=0; i<5; i++) {
 				firstConvolution[i] = applyConvolution(i, picture);							//prvni konvoluce
-//				if (i==0)
-//					writeInfo(firstConvolution[i], "apply convolution 1");
+				firstConvolution[i] = function(firstConvolution[i], "ReLu");						// prvni funkce aktivace (Tanh)
 				firstConvolution[i] = addX(firstConvolution[i]);				
-//				if (i==0)
-//					writeInfo(firstConvolution[i], "Add x - 0");
 				firstConvolution[i] = pooling(2, firstConvolution[i]);						//prvni pooling
-//				if (i==0)
-//					writeInfo(firstConvolution[i], "pooling 1");
-				firstConvolution[i] = function(firstConvolution[i]);						// prvni funkce aktivace (Tanh)
-//				if (i==0)
-//					writeInfo(firstConvolution[i], "TanH 1");
+				
 			}
-			
 			double[][,] secondConvolution = new double[25][,];
 			int  cisloFiltra = 5;
 			int  cisloPolozky = 0;
 			for(int j=0; j<5; j++) {
 				for(int i=0; i<5; i++) {
 					secondConvolution[cisloPolozky] = applyConvolution(cisloFiltra, firstConvolution[j]);
-//					if ((j==0)&&(i==0))
-//						writeInfo(secondConvolution[cisloPolozky], "apply convolution 2");
+					secondConvolution[cisloPolozky] = function(secondConvolution[cisloPolozky], "ReLu");
 					secondConvolution[cisloPolozky] = pooling(2, secondConvolution[cisloPolozky]);
-//					if ((j==0)&&(i==0))
-//						writeInfo(secondConvolution[cisloPolozky], "poolin 2");
-					secondConvolution[cisloPolozky] = function(secondConvolution[cisloPolozky]);
 					cisloFiltra++;
 					cisloPolozky++;
 				}
@@ -103,15 +91,9 @@ namespace BP_pokus_3
 			for(int j=0; j<25; j++) {
 				for(int i=0; i<5; i++) {
 					thirdConvolution[cisloPolozky] = applyConvolution(cisloFiltra, secondConvolution[j]);
-//					if ((j==0)&&(i==0))
-//						writeInfo(thirdConvolution[cisloPolozky], "apply convolution 3");
 					thirdConvolution[cisloPolozky] = addY(thirdConvolution[cisloPolozky]);
-//					if ((j==0)&&(i==0))
-//						writeInfo(thirdConvolution[cisloPolozky], "add y - 0");
+					thirdConvolution[cisloPolozky] = function(thirdConvolution[cisloPolozky], "ReLu");
 					thirdConvolution[cisloPolozky] = pooling(3, thirdConvolution[cisloPolozky]);
-//					if((j==0)&&(i==0))
-//						writeInfo(thirdConvolution[cisloPolozky], "pooling 3x3");
-					thirdConvolution[cisloPolozky] = function(thirdConvolution[cisloPolozky]);
 					cisloFiltra++;
 					cisloPolozky++;
 				}
@@ -149,17 +131,34 @@ namespace BP_pokus_3
 			for (int i=0; i<15; i++) {
 				templ.Value.countAverageInput();
 				templ.Value.countAverageOutput();
+				for(int k=0; k<templ.Value.avInput.GetUpperBound(0)+1;k++) {			//mazani zbytecnych dat
+					for(int j=0; j<templ.Value.avInput.GetUpperBound(1)+1; j++) {
+						templ.Value.avInput[k,j].inputList.Clear();
+					}
+				}
+				templ.Value.allOutputs.Clear();
 				templ = templ.Next;
 			}
 			
 			return index;
 		}
 		
-		double[,] function(double[,] picture) {
+		double[,] function(double[,] picture, String nazevFunkce) {
 			double[,] result = picture;
 			for(int i=0; i<picture.GetUpperBound(0)+1; i++) {
 				for(int j=0; j<picture.GetUpperBound(1)+1; j++) {
-					result[i,j] = 1.7159*Math.Tanh(0.66*picture[i,j]);
+					if(nazevFunkce == "Tanh") {
+						result[i,j] = 1.7159*Math.Tanh(0.66*picture[i,j]);
+					}
+					else if(nazevFunkce == "ReLu") {
+					   	if(result[i,j] > 0){
+							result[i,j] = result[i,j];
+						}
+						else {
+							result[i,j] = 0;
+						}
+					}
+					
 				}
 			}
 			return result;
@@ -172,6 +171,7 @@ namespace BP_pokus_3
 			int lokResult = 0;
 			double errorMin = 100;
 			int testValue = 0;
+			int bestTestValue = 0;
 			
 			
 			while(testValue < 100) {
@@ -190,7 +190,7 @@ namespace BP_pokus_3
 					templ2 = net.l2.head;
 					templ3.grad = 0.388*(1.7159 - templ3.output)*(1.7159 + templ3.output)*err[i];				//pocita gradient pro vystupni vyrstvu
 					for (int j=0; j<Neuronet.druhaVrstva; j++) {
-						templ3.weights[j]+=net.speedL*templ2.output*templ3.grad;								//pocita vahy pro vystupni vrstvu
+						templ3.weights[j]+=net.speedLFCN*templ2.output*templ3.grad;								//pocita vahy pro vystupni vrstvu
 						templ2 = templ2.next;
 					}
 					templ3 = templ3.next;
@@ -209,7 +209,7 @@ namespace BP_pokus_3
 					templ2.grad = grad*0.388*(1.7159-templ2.output)*(1.7159+ templ2.output);
 					templ1 = net.l1.head;
 					for (int j=0; j<Neuronet.prvniVrstva; j++) {
-						templ2.weights[j]+=net.speedL*templ1.output*templ2.grad;
+						templ2.weights[j]+=net.speedLFCN*templ1.output*templ2.grad;
 						templ1 = templ1.next;
 					}
 					templ2 = templ2.next;
@@ -225,10 +225,11 @@ namespace BP_pokus_3
 					}
 					templ1.grad = grad*0.388*(1.7159-templ1.output)*(1.7159+ templ1.output);
 					for (int j=0; j<Neuronet.inputLength; j++) {
-						templ1.weights[j]+=net.speedL*templ1.input[j]*grad;
+						templ1.weights[j]+=net.speedLFCN*templ1.input[j]*grad;
 					}
 					templ1 = templ1.next;
 				}
+				
 				
 				//pro filtry 10 az 14
 				LinkedListNode<Convolution> templ = net.convolutions.First;
@@ -242,10 +243,11 @@ namespace BP_pokus_3
 						grad+=templ1.grad;												//sumarizuje gradient predhozi vrstvy
 						templ1 = templ1.next;
 					}
+				
 					templ.Value.grad = grad*0.388*(1.7159-templ.Value.averageOutput)*(1.7159+templ.Value.averageOutput)/net.l1.length;
 					for(int k=0; k<templ.Value.weights.GetUpperBound(0)+1; k++) {
 						for(int q=0; q<templ.Value.weights.GetUpperBound(1)+1; q++) {
-							templ.Value.weights[k,q] += net.speedL*templ.Value.grad*templ.Value.avInput[k,q].average;
+							templ.Value.weights[k,q] += net.speedLCL*templ.Value.grad*templ.Value.avInput[k,q].average;
 						}
 					}
 					templ = templ.Next;
@@ -269,11 +271,11 @@ namespace BP_pokus_3
 					templ.Value.grad = grad*0.388*(1.7159-templ.Value.averageOutput)*(1.7159+templ.Value.averageOutput)/Neuronet.prvniVrstva;
 					for(int k=0; k<templ.Value.weights.GetUpperBound(0)+1; k++) {
 						for(int q=0; q<templ.Value.weights.GetUpperBound(1)+1; q++) {
-							templ.Value.weights[k,q] += net.speedL*templ.Value.grad*templ.Value.avInput[k,q].average;
+							templ.Value.weights[k,q] += net.speedLCL*templ.Value.grad*templ.Value.avInput[k,q].average;
 						}
 					}
 					templ = templ.Next;
-				}
+				}	
 				
 				//pro filtry 0 az 4
 				templ = net.convolutions.First;
@@ -290,8 +292,9 @@ namespace BP_pokus_3
 					templ.Value.grad = grad*0.388*(1.7159-templ.Value.averageOutput)*(1.7159+templ.Value.averageOutput)/Neuronet.druhaVrstva;
 					for(int k=0; k<templ.Value.weights.GetUpperBound(0)+1; k++) {
 						for(int q=0; q<templ.Value.weights.GetUpperBound(1)+1; q++) {
-							templ.Value.weights[k,q] += net.speedL*templ.Value.grad*templ.Value.avInput[k,q].average;
+							templ.Value.weights[k,q] += net.speedLCL*templ.Value.grad*templ.Value.avInput[k,q].average;
 						}
+						
 					}
 					templ = templ.Next;
 				}
@@ -303,24 +306,25 @@ namespace BP_pokus_3
 					errorMin = lokError/iteration*100;
 				if (iteration % 10 == 0) {
 					testValue = test();
+					if (testValue > bestTestValue) {
+						bestTestValue = testValue;
+						serializace("BestValue");
+					}
 					writeProgressInfo(iteration, errorMin, testValue);
-					writeAllConvolution(iteration);
+					if(iteration % 100 == 0) {
+						writeAllConvolution(iteration);
+					}
 					newEpoch(); 				//?
 				}
-				else {
-					writeProgressInfo(iteration, errorMin);
-					writeAllConvolution(iteration);
-				}
-				if(iteration % 100 == 0) {
+				if(iteration % 100000 == 0) {
 					_convolutionsInfo=null;
 				}
-				if(iteration % 500 == 0) {
+				if(iteration % 1000000 == 0) {
 					progressInfo = null;
 				}
 				iteration++;
 			}
-			serializace();
-			
+			serializace("normal");
 		}
 		
 		double[,] pooling(int size, double[,] picture) {             			// size treba 2x2 => size=2
@@ -409,7 +413,9 @@ namespace BP_pokus_3
 
 		void Button1Click(object sender, EventArgs e)
 		{
-			net = new Neuronet();
+//			net = new Neuronet();
+			net = deseralizace("BestWeights");
+//			writeAllConvolution(0);
 			study();
 		}
 			
@@ -449,12 +455,12 @@ namespace BP_pokus_3
 		}
 		
 		static void writeProgressInfo(int iteration, double errorMin, int testValue) {
-			progressInfo += "iteration= "+iteration+" error min. = "+errorMin+" test= "+testValue+"\r\n";
+			progressInfo += "epoch = "+iteration/10+" error min. = "+errorMin+" test= "+testValue+"\r\n";
 			File.WriteAllText("writeProgressInfo.txt", progressInfo);
 		}
 		
 		static void writeProgressInfo(int iteration, double errorMin) {
-			progressInfo += "iteration= "+iteration+" error min. = "+errorMin+"\r\n";
+			progressInfo += "epoch = "+iteration/10+" error min. = "+errorMin+"\r\n";
 			File.WriteAllText("writeProgressInfo.txt", progressInfo);
 		}
 
@@ -483,20 +489,28 @@ namespace BP_pokus_3
 			return vysledek*10;
 		}
 
-		void serializace() {
+		void serializace(String wayOfSaving) {
 			BinaryFormatter formatter = new BinaryFormatter();
-			using ( var fSream = new FileStream("weights.dat", FileMode.Create, FileAccess.Write, FileShare.None)) {
+			if (wayOfSaving == "normal") {
+				using ( var fSream = new FileStream("weights.dat", FileMode.Create, FileAccess.Write, FileShare.None)) {
 				formatter.Serialize(fSream, net);
+				}
 			}
+			else {
+				using ( var fSream = new FileStream("BestWeights.dat", FileMode.Create, FileAccess.Write, FileShare.None)) {
+				formatter.Serialize(fSream, net);
+				}
+			}
+			
 		}
 
-		Neuronet deseralizace() {
+		Neuronet deseralizace(String way) {
 			try {
-				using (var fStream = File.OpenRead("weights.dat")) {
+				using (var fStream = File.OpenRead(way+".dat")) {
 					BinaryFormatter formatter = new BinaryFormatter();
 					return  (Neuronet)formatter.Deserialize(fStream);
 				}
-			} catch {
+			} catch (Exception e) {
 				return new Neuronet();
 			}
 		}

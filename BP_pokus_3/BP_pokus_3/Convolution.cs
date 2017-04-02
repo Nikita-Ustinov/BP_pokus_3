@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BP_pokus_3
 {
 	/// <summary>
 	/// To discripe convoluce and list of inputs with their average value.
 	/// </summary>
+	
+	[Serializable]
 	public class Convolution
 	{
 		public double[,] weights;
@@ -15,7 +18,9 @@ namespace BP_pokus_3
 		public double grad;
 		public double averageOutput;
 		public LinkedList<double> allOutputs = new LinkedList<double>();
+		private static LinkedList<Convolution> Filters = new LinkedList<Convolution>();
 		
+		[Serializable]
 		public struct AverageInput {
 			public double average;
 	     	public LinkedList<Double> inputList;
@@ -24,7 +29,12 @@ namespace BP_pokus_3
 		public Convolution(int size, int cisloFiltra)
 		{
 			this.cisloFiltra = cisloFiltra;
-			weights = doRandomWeights(new double[size,size]);
+			if(cisloFiltra == 0) {
+				weights = doFirstRandomWeights(new double[size,size]);
+			}
+			else {
+				weights = doRandomWeights(new double[size,size]);
+			}
 			avInput = new AverageInput[size,size];
 			this.size = size;
 			for (int i=0; i<size; i++) {
@@ -32,15 +42,40 @@ namespace BP_pokus_3
 					avInput[i,j].inputList = new LinkedList<double>();
 				}
 			}
+			Filters.AddLast(this);
 		}
 		
-		double[,] doRandomWeights(double[,] newFilter) {
+		double[,] doFirstRandomWeights(double[,] newFilter) {
 			Random rand = new Random();
+			
 			for(int i=0; i<newFilter.GetUpperBound(0)+1; i++) {
 				for(int j=0; j<newFilter.GetUpperBound(1)+1; j++) {
 					do{
 				 		newFilter[i,j] = rand.Next(-6,5)*0.1 + 0.1;
-					} while (newFilter[i,j] == 0);
+					} while (newFilter[i,j] == 0 );
+				}
+			}
+			return newFilter;
+		}
+		
+		double[,] doRandomWeights(double[,] newFilter) {
+			Random rand = new Random();
+			LinkedListNode<Convolution> templ = Filters.First;
+			while(templ.Value.cisloFiltra != cisloFiltra-1) {
+				templ = templ.Next;
+			}
+			for(int i=0; i<newFilter.GetUpperBound(0)+1; i++) {
+				for(int j=0; j<newFilter.GetUpperBound(1)+1; j++) {
+					if((cisloFiltra != 5)||(cisloFiltra != 10)){
+						do{
+					 		newFilter[i,j] = rand.Next(-6,5)*0.1 + 0.1;
+						} while (newFilter[i,j] == templ.Value.weights[i,j]);
+					}
+					else {
+						do{
+					 		newFilter[i,j] = rand.Next(-6,5)*0.1 + 0.1;
+						} while (newFilter[i,j] == 0);
+					}
 				}
 			}
 			return newFilter;

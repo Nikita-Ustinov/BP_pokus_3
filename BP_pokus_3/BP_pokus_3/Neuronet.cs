@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.IO;
 namespace BP_pokus_3
-{																																												/// <summary> /// Description of Neuronet. /// </summary>
+{	/// <summary> /// Description of Neuronet. /// </summary>
+	[Serializable]
 	public class Neuronet
 	{	
 		public List l1, l2, l3;
@@ -10,7 +11,8 @@ namespace BP_pokus_3
 		public static int prvniVrstva = 50;		
 		public static int druhaVrstva= 50;		
 		public static int tretiVrstva= 10;
-		public double speedL = 0.1;
+		public double speedLFCN = 0.1;				//rychlost uceni pro "fully connection neuronet"
+		public double speedLCL = 0.6;				//rychlost uceni pro "convolution leares"
 		
 		public LinkedList<Convolution> convolutions = new LinkedList<Convolution>();
 		
